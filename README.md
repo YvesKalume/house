@@ -5,7 +5,6 @@
 - Profil management.
 - wysiwyg for house description
 - House pictures management
-- Openstreetmap : chose position and save it in the database when adding,updating house, also add a Search Control layer to the map
 
 ## About Laravel
 
