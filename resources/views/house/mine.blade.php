@@ -12,7 +12,7 @@
                         <div class="product">
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-md-3">
-                                    <div class="product-image"><img class="img-fluid d-block mx-auto image" src="assets/img/tech/image2.jpg"></div>
+                                    <div class="product-image"><img class="img-fluid d-block mx-auto image" src="/storage/{{$house->picture}}"></div>
                                 </div>
                                 <div class="col-md-5 product-info"><a class="product-name" href="{{route('house.preview',compact('house'))}}">{{$house->avenue}}</a>
                                     <div class="product-specs">

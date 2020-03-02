@@ -28,7 +28,7 @@
                                     @foreach($houses as $house)
                                     <div class="col-12 col-md-6 col-lg-4">
                                         <div class="clean-product-item">
-                                            <div class="image"><a href="#"><img class="img-fluid d-block mx-auto" src="{{$house->picture}}"></a></div>
+                                            <div class="image"><a href="#"><img class="img-fluid d-block mx-auto" src="/storage/{{$house->picture}}"></a></div>
                                             <div class="product-name"><a href="#">{{$house->avenue}}</a></div>
                                             <div class="about">
                                                 <div class="price">

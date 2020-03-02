@@ -7,28 +7,39 @@
                     <h2 class="text-info">Payment</h2>
                     <p>Cliquez sur l'icone de recherche '<i class="fas fa-search"></i>" et entrez l'addresse du batiment que vous voulez ajouter</p>
                 </div>
-                <form action="{{route('house.store')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('house.update',compact('house'))}}" method="post" enctype="multipart/form-data">
                     {{csrf_field()}}
                     <div id="map" class="title"></div>
                     <div class="card-details">
                         <h3 class="title">Information</h3>
+
                         <div class="form-row">
-                            <div class="col-sm-7">
+                            <div class="col-sm-12">
+                                {{--hidden inputs for longitude and latitude--}}
+                                <input type="text" name="lat" id="latInput" hidden>
+                                <input type="text" name="long" id="longInput" hidden>
+
                                 <div class="form-group">
-                                    <label for="card-holder">Numero du batiment</label>
-                                    <input name="number" class="form-control" type="text" placeholder="Card Holder" value="{{$house->number}}">
+                                    <label for="avenue">Avenue</label>
+                                    <input name="avenue" class="form-control" id="avenue" type="text" value="{{$house->avenue}}">
                                 </div>
                             </div>
+
+                            <div class="form-group col-sm-7">
+                                <label for="number">Numero du batiment</label>
+                                <input name="number" class="form-control" id="number" type="text" value="{{$house->number}}">
+                            </div>
+
                             <div class="col-sm-5">
-                                <div class="form-group"><label for="price">Prix(Fc)</label>
-                                    <div class="input-group">
-                                        <input id="price" name="price" class="form-control" type="number" value="{{$house->price}}">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="price">Prix ($)</label>
+                                    <input id="price" name="price" class="form-control" type="number" value="{{$house->price}}">
                                 </div>
                             </div>
+
                             <div class="col-sm-8">
                                 <div class="form-group"><label for="status">Status</label>
-                                    <select id="status" class="form-control">
+                                    <select id="status" name="status" class="form-control">
                                         @foreach($statuses as $status)
                                             @if($house->status->id == $status->id)
                                                 <option value="{{$status->id}}" selected>{{$status->name}}</option>
@@ -40,26 +51,27 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <label>Nobre des pieces</label>
-                                <input class="form-control" type="number" value="{{$house->pieces}}"></div>
+                                <label for="pieces">Nobre des pieces</label>
+                                <input class="form-control" name="pieces" id="pieces" type="number" value="{{$house->pieces}}">
+                            </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="square">Quartier</label>
-                                    <input class="form-control" type="text" id="square" value="{{$house->square}}">
+                                    <input class="form-control" type="text" id="square" name="square" value="{{$house->square}}">
                                 </div>
                             </div>
 
                             <div class="col">
                                 <label for="picture">Image</label>
-                                <input id="picture" value="/storage/pictures/house/1.jpg" name="picture" class="border rounded form-control" type="file" required="required" accept="image/*">
+                                <input id="picture" name="picture" class="border rounded form-control" type="file" accept="image/*">
                             </div>
 
                             <div class="col-sm-12">
                                 <label for="descrition">Description</label>
                                 <textarea id="descrition" name="description" class="form-control">{{$house->description}}</textarea>
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-block" type="submit">Enregistrer</button>
+                                    <button class="btn btn-primary btn-block" type="submit" value="{{$house->description}}">Ajouter</button>
                                 </div>
                             </div>
                         </div>
@@ -78,18 +90,22 @@
     </script>
 
     <script>
-        navigator.geolocation.getCurrentPosition(function(location) {
-            var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+        var latlng = [{{$house->lat}},{{$house->long}}]
 
-            var mymap = L.map('map').setView(latlng, 16)
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
-                id: 'mapbox.streets',
-                accessToken: 'pk.eyJ1IjoieXZlc2thbHVtZSIsImEiOiJjazczM3o3ZDIwOGNqM2ZxZWloODZqYzB3In0.ogvXbq39v5mFwS5LBb-1FA'
-            }).addTo(mymap);
+        var mymap = L.map('map').setView(latlng, 16)
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoieXZlc2thbHVtZSIsImEiOiJjazczM3o3ZDIwOGNqM2ZxZWloODZqYzB3In0.ogvXbq39v5mFwS5LBb-1FA'
+        }).addTo(mymap);
 
-            var marker = L.marker(latlng).addTo(mymap);
+        var marker = L.marker(latlng).addTo(mymap);
+
+        mymap.on('click',function(e){
+            marker.setLatLng(e.latlng).addTo(mymap);
+            $('#latInput').val(marker.getLatLng().lat)
+            $('#longInput').val(marker.getLatLng().lng)
         });
 
     </script>

@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div>
-                                    <div><img class="img-fluid d-block mx-auto" src="{{$house->picture}}"></div>
+                                    <div><img class="img-fluid d-block mx-auto" src="/storage/{{$house->picture}}"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -74,7 +74,7 @@
         }).addTo(mymap);
         var marker = L.marker(['{{$house->lat}}','{{$house->long}}']).addTo(mymap);
 
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+        marker.bindPopup("<b>Hey ! je suis là</b>").openPopup();
     </script>
 @endsection
 

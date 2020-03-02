@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\House;
 
+use App\Event;
 use App\House;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HouseRequest;
+use App\Http\Requests\UpdateHouseRequest;
 use App\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,7 +37,8 @@ class HouseController extends Controller
      */
     public function create()
     {
-        return view('house.add');
+        $statuses = Status::get();
+        return view('house.add',compact('statuses'));
     }
 
     /**
@@ -46,6 +49,8 @@ class HouseController extends Controller
      */
     public function store(HouseRequest $request)
     {
+        $picture = request('picture')->store('pictures/house','public');
+
         House::create([
             'avenue'=>request('avenue'),
             'number'=>request('number'),
@@ -54,11 +59,13 @@ class HouseController extends Controller
             'lat'=>request('lat'),
             'pieces'=>request('pieces'),
             'price'=>request('price'),
-            'picture'=>request('picture'),
+            'picture'=>$picture,
             'description'=>request('description'),
             'status_id'=>request('status'),
             'user_id'=>auth()->id(),
         ]);
+
+        return redirect(route('house.list'));
     }
 
     /**
@@ -93,17 +100,37 @@ class HouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(HouseRequest $request, $id)
+    public function update(UpdateHouseRequest $request, $id)
     {
-        House::update([
+        if ($request->filled('lat')) {
+            $lat = $request->lat;
+            $long = $request->long ;
+
+        }else{
+            $lat = House::find($id)->lat;
+            $long = House::find($id)->long;
+        }
+
+
+        if ($request->missing('picture')) {
+
+            $picture = House::find($id)->picture;
+
+        } else {
+
+            $picture = \request('picture')->store('pictures/house','public');
+
+        }
+
+        House::findOrFail($id)->update([
             'avenue'=>request('avenue'),
             'number'=>request('number'),
             'square'=>request('square'),
-            'long'=>request('long'),
-            'lat'=>request('lat'),
+            'long'=>$long,
+            'lat'=>$lat,
             'pieces'=>request('pieces'),
             'price'=>request('price'),
-            'picture'=>request('picture'),
+            'picture'=>$picture,
             'description'=>request('description'),
             'status_id'=>request('status'),
             'user_id'=>auth()->id(),

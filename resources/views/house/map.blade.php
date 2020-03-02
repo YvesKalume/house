@@ -34,7 +34,7 @@
                 zoomOffset: -1,
                 accessToken: 'pk.eyJ1IjoieXZlc2thbHVtZSIsImEiOiJjazczM3o3ZDIwOGNqM2ZxZWloODZqYzB3In0.ogvXbq39v5mFwS5LBb-1FA'
             }).addTo(mymap);
-            const marker = L.marker(latlng).addTo(mymap);
+            const myPosition = L.marker(latlng).addTo(mymap);
 
             var circle = L.circle(latlng, {
                 color: 'rgba(255,0,51,0.4)',
@@ -45,12 +45,10 @@
 
 
 
-
-            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
             var houses = @json($houses);
             houses.forEach((house)=>{
                 let marker = L.marker([house.lat,house.long]).addTo(mymap);
+                marker.bindPopup(`<b>${house.price}$</b><br>${house.pieces} pieces <br><a href="/house/${house.id}">Voir</a>`).openPopup();
             })
 
 
