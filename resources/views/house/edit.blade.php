@@ -16,8 +16,8 @@
                         <div class="form-row">
                             <div class="col-sm-12">
                                 {{--hidden inputs for longitude and latitude--}}
-                                <input type="text" name="lat" id="latInput" hidden>
-                                <input type="text" name="long" id="longInput" hidden>
+                                <input type="text" name="lat" id="latInput" value="{{$house->lat}}" hidden>
+                                <input type="text" name="long" id="longInput" value="{{$house->long}}" hidden>
 
                                 <div class="form-group">
                                     <label for="avenue">Avenue</label>

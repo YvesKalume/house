@@ -102,15 +102,6 @@ class HouseController extends Controller
      */
     public function update(UpdateHouseRequest $request, $id)
     {
-        if ($request->filled('lat')) {
-            $lat = $request->lat;
-            $long = $request->long ;
-
-        }else{
-            $lat = House::find($id)->lat;
-            $long = House::find($id)->long;
-        }
-
 
         if ($request->missing('picture')) {
 
@@ -126,8 +117,8 @@ class HouseController extends Controller
             'avenue'=>request('avenue'),
             'number'=>request('number'),
             'square'=>request('square'),
-            'long'=>$long,
-            'lat'=>$lat,
+            'long'=>request('long'),
+            'lat'=>request('lat'),
             'pieces'=>request('pieces'),
             'price'=>request('price'),
             'picture'=>$picture,
